@@ -404,7 +404,40 @@
 
     document
       .querySelector('.dt-btn-cart')
-      .addEventListener('click', openCartPopup);
+      .addEventListener('click', () => {
+        if (typeof cartItems !== 'undefined') {
+          const existingItem = cartItems.find(item => item.id === "product-004");
+          if (existingItem) {
+            const currentStock = existingItem.stock ?? 10;
+            if (existingItem.quantity >= currentStock) {
+              if (typeof showStockFeedback === 'function') {
+                showStockFeedback();
+              }
+              return;
+            }
+            existingItem.quantity += 1;
+          } else {
+            cartItems.push({
+              id: "product-004",
+              name: "MONAMI 153 ID",
+              price: 15000,
+              quantity: 1,
+              stock: 10,
+              image: "img/w_h9.png",
+              colorHex: "var(--red)",
+              colorName: "Signature Red",
+              filter: "none"
+            });
+          }
+          if (typeof saveCartToStorage === 'function') {
+            saveCartToStorage();
+          }
+          if (typeof updateCartBadge === 'function') {
+            updateCartBadge();
+          }
+        }
+        openCartPopup();
+      });
 
     document
       .getElementById('cartPopupOverlay')
