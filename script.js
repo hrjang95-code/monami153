@@ -305,6 +305,11 @@ function logoutUser() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Kakao SDK 초기화
+  if (window.Kakao && !Kakao.isInitialized()) {
+    Kakao.init('6d84eee9328b5a332929db265893cfce'); // 사용자가 별도로 전달한 키 값으로 교체
+  }
+
   // 1. Google 실제 로그인 버튼 연결
   const googleBtn = document.getElementById('login-google');
   if (googleBtn) {
@@ -332,6 +337,28 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (error) {
         console.error("Google 로그인 실패:", error);
         showLoginToast("Google 로그인을 완료하지 못했습니다.");
+      }
+    });
+  }
+
+  // 2. Kakao 로그인 버튼 연결
+  const kakaoBtn = document.getElementById('login-kakao');
+  if (kakaoBtn) {
+    kakaoBtn.addEventListener('click', () => {
+      try {
+        if (!window.Kakao) {
+          console.error("Kakao SDK가 로드되지 않았습니다.");
+          return;
+        }
+        if (!Kakao.isInitialized()) {
+          console.error("Kakao SDK가 초기화되지 않았습니다.");
+          return;
+        }
+        Kakao.Auth.authorize({
+          redirectUri: 'http://127.0.0.1:5500/MONAMI153/kakao-callback.html'
+        });
+      } catch (error) {
+        console.error("Kakao 로그인 요청 실패:", error);
       }
     });
   }
