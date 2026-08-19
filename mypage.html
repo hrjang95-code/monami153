@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 
 <head>
@@ -39,7 +39,7 @@
 
         <div class="brand__tags">
           <button>#153오리지널</button>
-          <button>#토너먼트</button>
+          <button>#토니펜</button>
           <button>#153네이처</button>
           <button>#한정판</button>
           <button>#이벤트</button>
@@ -47,28 +47,17 @@
         </div>
 
         <div class="brand__cards">
-
           <!-- 153 STORY -->
           <article class="brand-card">
+            <h2 class="brand-card__title">153 STORY</h2>
             <div class="brand-card__content">
-              <h2 class="brand-card__title">153 STORY</h2>
-
-              <p class="brand-card__body">
-                1963년부터<br />
-                사랑받아온<br />
-                모나미 153
-              </p>
+              <p class="brand-card__body">1963년부터<br />사랑받아온<br />모나미 153</p>
             </div>
-
             <div class="brand-card__illust" aria-hidden="true">
               <img src="img/w_h2.png" alt="153 STORY" />
             </div>
-
             <div class="brand-card__footer">
-              <button
-                class="brand-card__btn"
-                aria-label="153 스토리 자세히 보기"
-              >
+              <button class="brand-card__btn" aria-label="153 스토리 자세히 보기">
                 <svg viewBox="0 0 24 24">
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
@@ -78,29 +67,15 @@
 
           <!-- COLOR PICK -->
           <article class="brand-card">
-            <div class="brand-card__content">
-              <h2 class="brand-card__title">COLOR PICK</h2>
-
-              <p class="brand-card__body">
-                당신의 하루를<br />
-                완성할<br />
-                컬러를 찾아
-              </p>
+            <h2 class="brand-card__title">COLOR PICK</h2>
+            <div class="brand-card__content-row">
+              <p class="brand-card__body">당신의 하루를<br />물들일<br />컬러를 찾아</p>
+              <div class="brand-card__illust brand-card__illust--colorpick" aria-hidden="true">
+                <img src="img/w_h11.png" alt="COLOR PICK" />
+              </div>
             </div>
-
-            <div class="brand-card__swatches" aria-hidden="true">
-              <span class="swatch" style="background:#e30613" title="RED"></span>
-              <span class="swatch" style="background:#1d69b7" title="NAVY"></span>
-              <span class="swatch" style="background:#07804f" title="GREEN"></span>
-              <span class="swatch" style="background:#e881a4" title="PINK"></span>
-              <span class="swatch" style="background:#d9cbbf" title="BEIGE"></span>
-            </div>
-
             <div class="brand-card__footer">
-              <button
-                class="brand-card__btn"
-                aria-label="컬러 찾기 서비스 바로가기"
-              >
+              <button class="brand-card__btn" aria-label="컬러 찾기 서비스 바로가기">
                 <svg viewBox="0 0 24 24">
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
@@ -110,31 +85,21 @@
 
           <!-- GIFT SHOP -->
           <article class="brand-card">
+            <h2 class="brand-card__title">GIFT SHOP</h2>
             <div class="brand-card__content">
-              <h2 class="brand-card__title">GIFT SHOP</h2>
-
-              <p class="brand-card__body">
-                153으로 전하는<br />
-                마음, 선물하기
-              </p>
+              <p class="brand-card__body">153으로 전하는<br />마음, 선물하기</p>
             </div>
-
             <div class="brand-card__gift-icon" aria-hidden="true">
               <img src="img/w_h3.png" alt="GIFT SHOP" />
             </div>
-
             <div class="brand-card__footer">
-              <button
-                class="brand-card__btn"
-                aria-label="선물샵 구경하기"
-              >
+              <button class="brand-card__btn" aria-label="선물샵 구경하기">
                 <svg viewBox="0 0 24 24">
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </button>
             </div>
           </article>
-
         </div>
       </section>
     </aside>
@@ -154,21 +119,14 @@
             monami<span>153</span>
           </a>
 
-          <button
-            class="app__icon app__cart"
-            aria-label="장바구니"
-            onclick="location.href='cart.html'"
-          >
+          <button class="app__icon app__cart" aria-label="장바구니" onclick="location.href='cart.html'">
             <svg viewBox="0 0 24 24">
               <path d="M3 4h2l2 11h10l2-8H6" />
               <circle cx="9" cy="19" r="1" />
               <circle cx="17" cy="19" r="1" />
             </svg>
 
-            <span
-              class="app__cart-badge"
-              aria-label="새로운 알림"
-            ></span>
+            <span class="app__cart-badge" aria-label="새로운 알림"></span>
           </button>
         </header>
 
@@ -200,11 +158,60 @@
               <p class="myp-hero__subtitle">
                 "내가 고른 색. 내가 남긴 기록."
               </p>
-              
-              <div class="myp-user-info">
-                <p id="myp-user-name" class="myp-hero__username"></p>
-                <p id="myp-user-email" class="myp-hero__userdetail"></p>
-                <p id="myp-user-provider" class="myp-hero__userdetail"></p>
+
+              <div class="myp-profile-card">
+                <div class="myp-profile__top">
+                  <div class="myp-profile__avatar">
+                    <img id="myp-user-photo" src="img/login.png" alt="프로필" onerror="this.src='img/login.png'" />
+                  </div>
+                  <div class="myp-profile__info">
+                    <div class="myp-profile__name-row">
+                      <p id="myp-user-name" class="myp-profile__name"></p>
+                      <span class="myp-profile__badge">
+                        <svg viewBox="0 0 24 24" fill="var(--red)">
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </span>
+                    </div>
+                    <p class="myp-profile__intro">
+                      MONAMI 153과 함께한<br>
+                      153번째 컬러의 순간 ✎ ✨
+                    </p>
+                    <div class="myp-profile__account">
+                      <svg viewBox="0 0 24 24" width="14" height="14" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                      </svg>
+                      <span class="myp-profile__provider">Google 계정</span>
+                      <span class="myp-profile__divider">|</span>
+                      <span id="myp-user-email" class="myp-profile__email"></span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="myp-profile__stats">
+                  <div class="myp-profile__stat">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="var(--red)">
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg>
+                    <div class="myp-profile__stat-text">
+                      <span class="myp-profile__stat-label">위시리스트</span>
+                      <span class="myp-profile__stat-val">12</span>
+                    </div>
+                  </div>
+                  <div class="myp-profile__stat">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#111" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                    </svg>
+                    <div class="myp-profile__stat-text">
+                      <span class="myp-profile__stat-label">작성한 리뷰</span>
+                      <span class="myp-profile__stat-val">7</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -236,7 +243,8 @@
 
             <div class="myp-quick__btn">
               <svg viewBox="0 0 24 24">
-                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                <path
+                  d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
                 <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
                 <line x1="12" y1="22.08" x2="12" y2="12" />
               </svg>
@@ -246,7 +254,8 @@
 
             <div class="myp-quick__btn">
               <svg viewBox="0 0 24 24">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                <path
+                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
               </svg>
 
               <span>WISHLIST</span>
@@ -254,7 +263,8 @@
 
             <div class="myp-quick__btn">
               <svg viewBox="0 0 24 24">
-                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+                <path
+                  d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
                 <path d="M9 12h6" />
               </svg>
 
@@ -290,12 +300,8 @@
               <div class="myp-order__content">
 
                 <div class="myp-order__img">
-                  <img
-                    src="img/w_h8.png"
-                    alt="153 DIY Custom Pen"
-                    style="filter:hue-rotate(210deg) saturate(2)"
-                    onerror="this.style.display='none'"
-                  />
+                  <img src="img/w_h8.png" alt="153 DIY Custom Pen" style="filter:hue-rotate(210deg) saturate(2)"
+                    onerror="this.style.display='none'" />
                 </div>
 
                 <div class="myp-order__info">
@@ -312,10 +318,7 @@
                     ₩3,000
                   </p>
 
-                  <a
-                    href="#"
-                    class="myp-order__track"
-                  >
+                  <a href="#" class="myp-order__track">
                     Track Order &rarr;
                   </a>
                 </div>
@@ -344,16 +347,13 @@
                 <div class="myp-wish__img-wrap">
                   <div class="myp-wish__heart">
                     <svg viewBox="0 0 24 24">
-                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                      <path
+                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                     </svg>
                   </div>
 
-                  <img
-                    src="img/w_h8.png"
-                    alt="153 ID Lemon"
-                    style="filter:hue-rotate(45deg) saturate(3)"
-                    onerror="this.style.display='none'"
-                  />
+                  <img src="img/w_h8.png" alt="153 ID Lemon" style="filter:hue-rotate(45deg) saturate(3)"
+                    onerror="this.style.display='none'" />
                 </div>
 
                 <div class="myp-wish__info">
@@ -378,16 +378,13 @@
                 <div class="myp-wish__img-wrap">
                   <div class="myp-wish__heart">
                     <svg viewBox="0 0 24 24">
-                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                      <path
+                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                     </svg>
                   </div>
 
-                  <img
-                    src="img/m_h2.png"
-                    alt="153 Neo Red"
-                    style="filter:hue-rotate(330deg) saturate(3)"
-                    onerror="this.style.display='none'"
-                  />
+                  <img src="img/m_h2.png" alt="153 Neo Red" style="filter:hue-rotate(330deg) saturate(3)"
+                    onerror="this.style.display='none'" />
                 </div>
 
                 <div class="myp-wish__info">
@@ -419,20 +416,11 @@
         </div>
 
         <!-- BOTTOM NAV -->
-        <nav
-          class="bottom-nav"
-          aria-label="하단 네비게이션"
-        >
+        <nav class="bottom-nav" aria-label="하단 네비게이션">
 
           <button onclick="location.href='index.html'">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
               <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
               <polyline points="9 22 9 12 15 12 15 22" />
             </svg>
@@ -441,14 +429,8 @@
           </button>
 
           <button onclick="location.href='product.html'">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
               <circle cx="11" cy="11" r="8" />
               <path d="m21 21-4.3-4.3" />
             </svg>
@@ -457,14 +439,8 @@
           </button>
 
           <button onclick="location.href='color.html'">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
               <circle cx="9" cy="21" r="1" />
               <circle cx="20" cy="21" r="1" />
               <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
@@ -473,18 +449,9 @@
             <span>COLOR</span>
           </button>
 
-          <button
-            class="active"
-            onclick="location.href='mypage.html'"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
+          <button class="is-active" class="active" onclick="location.href='mypage.html'">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
               <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
               <circle cx="12" cy="7" r="4" />
             </svg>
@@ -501,3 +468,4 @@
 </body>
 
 </html>
+

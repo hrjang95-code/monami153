@@ -17,8 +17,9 @@ function initDrawer() {
   if (!hamburgerBtn || !appContainer) return;
 
   const drawerHTML = `
-    <div class="drawer-overlay"></div>
-    <aside class="drawer-panel">
+    <div class="drawer-container">
+      <div class="drawer-overlay"></div>
+      <aside class="drawer-panel">
       <div class="drawer-panel__header">
         <button class="drawer-panel__close" aria-label="닫기">
           <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -113,6 +114,7 @@ function initDrawer() {
         </div>
       </div>
     </aside>
+    </div>
   `;
 
   // Insert drawer HTML into .app container
@@ -134,7 +136,13 @@ function initDrawer() {
     appContainer.style.overflow = '';
   }
 
-  hamburgerBtn.addEventListener('click', openDrawer);
+  hamburgerBtn.addEventListener('click', () => {
+    if (panel.classList.contains('is-active')) {
+      closeDrawer();
+    } else {
+      openDrawer();
+    }
+  });
   closeBtn.addEventListener('click', closeDrawer);
   overlay.addEventListener('click', closeDrawer);
 
@@ -215,7 +223,7 @@ let firebaseApp = null;
 async function getFirebaseAuth() {
   const { initializeApp, getApps } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js");
   const { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js");
-  
+
   if (!firebaseApp) {
     // 순수 정적 프로젝트이므로 Vercel 환경변수 자동 주입(import.meta.env)이 불가합니다.
     // 실제 빌드 환경이 아니므로 아래에 실제 값을 문자열로 입력해야 정상 작동합니다.
@@ -235,7 +243,7 @@ async function getFirebaseAuth() {
 function renderLoginState() {
   const loginUnauth = document.getElementById('login-unauth');
   const loginAuth = document.getElementById('login-auth');
-  
+
   if (!loginUnauth || !loginAuth) return;
 
   if (currentUser && currentUser.isLoggedIn) {
@@ -267,7 +275,7 @@ function renderMyPageState() {
 
     const myNameEl = document.getElementById('myp-user-name');
     const myEmailEl = document.getElementById('myp-user-email');
-    const myProviderEl = document.getElementById('myp-user-provider');
+    const myPhotoEl = document.getElementById('myp-user-photo');
 
     if (myNameEl) {
       myNameEl.textContent = currentUser.name || "MONAMI USER";
@@ -275,8 +283,12 @@ function renderMyPageState() {
     if (myEmailEl) {
       myEmailEl.textContent = currentUser.email || "";
     }
-    if (myProviderEl) {
-      myProviderEl.textContent = currentUser.provider ? currentUser.provider.toUpperCase() : "";
+    if (myPhotoEl) {
+      if (currentUser.photoURL) {
+        myPhotoEl.src = currentUser.photoURL;
+      } else {
+        myPhotoEl.src = "img/login.png";
+      }
     }
   } else {
     mypageUnauth.style.display = 'flex';
@@ -300,10 +312,10 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         const { auth, GoogleAuthProvider, signInWithPopup } = await getFirebaseAuth();
         const provider = new GoogleAuthProvider();
-        
+
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
-        
+
         currentUser = {
           uid: user.uid,
           provider: "google",
@@ -312,7 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
           photoURL: user.photoURL || "",
           isLoggedIn: true
         };
-        
+
         saveCurrentUser();
         renderLoginState();
         renderMyPageState();
@@ -320,32 +332,6 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (error) {
         console.error("Google 로그인 실패:", error);
         showLoginToast("Google 로그인을 완료하지 못했습니다.");
-      }
-    });
-  }
-
-  // 2. 임시 로그인 버튼 연결 (기존 유지)
-  const tempLoginBtn = document.getElementById('login-temporary');
-  
-  if (tempLoginBtn) {
-    tempLoginBtn.addEventListener('click', () => {
-      currentUser = {
-        uid: "temporary-user-001",
-        provider: "temporary",
-        name: "MONAMI USER",
-        email: "temporary@monami153.com",
-        photoURL: "",
-        isLoggedIn: true
-      };
-      
-      saveCurrentUser();
-      
-      console.log("임시 로그인 성공:", currentUser);
-
-      if (currentUser.isLoggedIn === true) {
-        showLoginToast("로그인 완료!\nMONAMI 153에 오신 것을 환영해요.");
-        renderLoginState();
-        renderMyPageState();
       }
     });
   }
@@ -457,7 +443,7 @@ function saveCartToStorage() {
 function renderCart() {
   const crtList = document.querySelector('.crt-list');
   if (!crtList) return;
-  
+
   if (cartItems.length === 0) {
     crtList.innerHTML = `
       <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; text-align: center; color: #555;">
@@ -503,10 +489,10 @@ function renderCart() {
   // 총 금액 계산 및 반영
   const totalPrice = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const formattedPrice = `₩${totalPrice.toLocaleString()}`;
-  
+
   const priceEl = document.querySelector('.crt-summary__row--price');
   const totalEl = document.querySelector('.crt-summary__total-val');
-  
+
   if (priceEl) priceEl.textContent = formattedPrice;
   if (totalEl) totalEl.textContent = formattedPrice;
 
@@ -514,7 +500,7 @@ function renderCart() {
   const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const itemLabel = totalQuantity === 1 ? 'ITEM' : 'ITEMS';
   const selectedEl = document.querySelector('.crt-summary__selected');
-  
+
   if (selectedEl) {
     selectedEl.textContent = `SELECTED: ${totalQuantity} ${itemLabel}`;
   }
@@ -537,7 +523,7 @@ function renderCart() {
 function updateCartBadge() {
   const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const badges = document.querySelectorAll('.app__cart-badge');
-  
+
   badges.forEach(badge => {
     if (totalQuantity > 0) {
       badge.textContent = totalQuantity;
@@ -615,8 +601,117 @@ function removeCartItem(id) {
   }
 }
 
+function initQuantitySelectors() {
+  const qtySelectors = document.querySelectorAll('.qty-selector, .col-mini-qty');
+  
+  qtySelectors.forEach(selector => {
+    const buttons = selector.querySelectorAll('button');
+    const span = selector.querySelector('span');
+    
+    if (buttons.length >= 2 && span) {
+      const minusBtn = buttons[0];
+      const plusBtn = buttons[1];
+      
+      minusBtn.setAttribute('type', 'button');
+      plusBtn.setAttribute('type', 'button');
+      
+      minusBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        let currentVal = Number(span.textContent);
+        if (isNaN(currentVal)) currentVal = 0;
+        
+        if (currentVal > 0) {
+          span.textContent = currentVal - 1;
+        }
+      });
+      
+      plusBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        let currentVal = Number(span.textContent);
+        if (isNaN(currentVal)) currentVal = 0;
+        
+        span.textContent = currentVal + 1;
+      });
+    }
+  });
+}
+
+function initSortSelects() {
+  const sortSelects = document.querySelectorAll('.product-sort-select');
+  
+  const allCards = document.querySelectorAll('.p-card, .col-mini-card');
+  allCards.forEach((card, idx) => {
+    if (!card.dataset.originalIndex) {
+      card.dataset.originalIndex = idx;
+    }
+  });
+
+  sortSelects.forEach(select => {
+    select.addEventListener('change', (e) => {
+      const sortBy = e.target.value;
+      const cards = Array.from(document.querySelectorAll('.p-card, .col-mini-card'));
+      const containerMap = new Map();
+      
+      cards.forEach(card => {
+        const parent = card.parentElement;
+        if (!containerMap.has(parent)) {
+          containerMap.set(parent, []);
+        }
+        containerMap.get(parent).push(card);
+      });
+      
+      containerMap.forEach((containerCards, parent) => {
+        containerCards.sort((a, b) => {
+          if (sortBy === 'popularity') {
+            return Number(a.dataset.originalIndex) - Number(b.dataset.originalIndex);
+          }
+          
+          if (sortBy === 'newest') {
+            const dateA = new Date(a.dataset.date || 0).getTime();
+            const dateB = new Date(b.dataset.date || 0).getTime();
+            return dateB - dateA; // Descending
+          }
+          
+          if (sortBy === 'price_low' || sortBy === 'price_high') {
+            const priceElA = a.querySelector('.p-card__price, .col-mini-card__price');
+            const priceElB = b.querySelector('.p-card__price, .col-mini-card__price');
+            
+            const priceA = priceElA ? Number(priceElA.textContent.replace(/[^0-9]/g, '')) : 0;
+            const priceB = priceElB ? Number(priceElB.textContent.replace(/[^0-9]/g, '')) : 0;
+            
+            if (sortBy === 'price_low') {
+              return priceA - priceB;
+            } else {
+              return priceB - priceA;
+            }
+          }
+          
+          if (sortBy === 'name') {
+            const nameElA = a.querySelector('h3, h4');
+            const nameElB = b.querySelector('h3, h4');
+            
+            const nameA = nameElA ? nameElA.textContent.trim() : '';
+            const nameB = nameElB ? nameElB.textContent.trim() : '';
+            
+            return nameA.localeCompare(nameB);
+          }
+          
+          return 0;
+        });
+        
+        containerCards.forEach(card => parent.appendChild(card));
+      });
+    });
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   renderCart();
   updateCartBadge();
+  initQuantitySelectors();
+  initSortSelects();
 });
-

@@ -38,7 +38,7 @@
 
         <div class="brand__tags">
           <button>#153오리지널</button>
-          <button>#토너먼트</button>
+          <button>#토니펜</button>
           <button>#153네이처</button>
           <button>#한정판</button>
           <button>#이벤트</button>
@@ -46,27 +46,17 @@
         </div>
 
         <div class="brand__cards">
-
           <!-- 153 STORY -->
           <article class="brand-card">
+            <h2 class="brand-card__title">153 STORY</h2>
             <div class="brand-card__content">
-              <h2 class="brand-card__title">153 STORY</h2>
-              <p class="brand-card__body">
-                1963년부터<br />
-                사랑받아온<br />
-                모나미 153
-              </p>
+              <p class="brand-card__body">1963년부터<br />사랑받아온<br />모나미 153</p>
             </div>
-
             <div class="brand-card__illust" aria-hidden="true">
               <img src="img/w_h2.png" alt="153 STORY" />
             </div>
-
             <div class="brand-card__footer">
-              <button
-                class="brand-card__btn"
-                aria-label="153 스토리 자세히 보기"
-              >
+              <button class="brand-card__btn" aria-label="153 스토리 자세히 보기">
                 <svg viewBox="0 0 24 24">
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
@@ -76,48 +66,15 @@
 
           <!-- COLOR PICK -->
           <article class="brand-card">
-            <div class="brand-card__content">
-              <h2 class="brand-card__title">COLOR PICK</h2>
-              <p class="brand-card__body">
-                당신의 하루를<br />
-                완성할<br />
-                컬러를 찾아
-              </p>
+            <h2 class="brand-card__title">COLOR PICK</h2>
+            <div class="brand-card__content-row">
+              <p class="brand-card__body">당신의 하루를<br />물들일<br />컬러를 찾아</p>
+              <div class="brand-card__illust brand-card__illust--colorpick" aria-hidden="true">
+                <img src="img/w_h11.png" alt="COLOR PICK" />
+              </div>
             </div>
-
-            <div class="brand-card__swatches" aria-hidden="true">
-              <span
-                class="swatch"
-                style="background:#e30613"
-                title="RED"
-              ></span>
-              <span
-                class="swatch"
-                style="background:#1d69b7"
-                title="NAVY"
-              ></span>
-              <span
-                class="swatch"
-                style="background:#07804f"
-                title="GREEN"
-              ></span>
-              <span
-                class="swatch"
-                style="background:#e881a4"
-                title="PINK"
-              ></span>
-              <span
-                class="swatch"
-                style="background:#d9cbbf"
-                title="BEIGE"
-              ></span>
-            </div>
-
             <div class="brand-card__footer">
-              <button
-                class="brand-card__btn"
-                aria-label="컬러 찾기 서비스 바로가기"
-              >
+              <button class="brand-card__btn" aria-label="컬러 찾기 서비스 바로가기">
                 <svg viewBox="0 0 24 24">
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
@@ -127,30 +84,21 @@
 
           <!-- GIFT SHOP -->
           <article class="brand-card">
+            <h2 class="brand-card__title">GIFT SHOP</h2>
             <div class="brand-card__content">
-              <h2 class="brand-card__title">GIFT SHOP</h2>
-              <p class="brand-card__body">
-                153으로 전하는<br />
-                마음, 선물하기
-              </p>
+              <p class="brand-card__body">153으로 전하는<br />마음, 선물하기</p>
             </div>
-
             <div class="brand-card__gift-icon" aria-hidden="true">
               <img src="img/w_h3.png" alt="GIFT SHOP" />
             </div>
-
             <div class="brand-card__footer">
-              <button
-                class="brand-card__btn"
-                aria-label="선물샵 구경하기"
-              >
+              <button class="brand-card__btn" aria-label="선물샵 구경하기">
                 <svg viewBox="0 0 24 24">
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </button>
             </div>
           </article>
-
         </div>
       </section>
     </aside>
@@ -234,8 +182,12 @@
             <div class="prod-filter__sort">
               <span>SORT</span>
 
-              <select>
-                <option>인기순</option>
+              <select class="product-sort-select">
+                <option value="popularity">인기순</option>
+                <option value="newest">최신순</option>
+                <option value="price_low">낮은 가격순</option>
+                <option value="price_high">높은 가격순</option>
+                <option value="name">이름순</option>
               </select>
             </div>
           </div>
@@ -245,7 +197,7 @@
 
             <!-- Item 1 -->
             <article
-              class="p-card"
+              class="p-card" data-date="2026-08-29"
               onclick="location.href='detail.html'"
             >
               <div class="p-card__top">
@@ -292,7 +244,7 @@
 
             <!-- Item 2 -->
             <article
-              class="p-card"
+              class="p-card" data-date="2026-08-28"
               onclick="location.href='detail.html'"
             >
               <div class="p-card__top">
@@ -340,7 +292,7 @@
 
             <!-- Item 3 -->
             <article
-              class="p-card"
+              class="p-card" data-date="2026-08-27"
               onclick="location.href='detail.html'"
             >
               <div class="p-card__top">
@@ -388,7 +340,7 @@
 
             <!-- Item 4 -->
             <article
-              class="p-card"
+              class="p-card" data-date="2026-08-26"
               onclick="location.href='detail.html'"
             >
               <div class="p-card__top">
@@ -436,7 +388,7 @@
 
             <!-- Item 5 -->
             <article
-              class="p-card"
+              class="p-card" data-date="2026-08-25"
               onclick="location.href='detail.html'"
             >
               <div class="p-card__top">
@@ -483,7 +435,7 @@
 
             <!-- Item 6 -->
             <article
-              class="p-card"
+              class="p-card" data-date="2026-08-24"
               onclick="location.href='detail.html'"
             >
               <div class="p-card__top">
@@ -633,3 +585,4 @@
 </body>
 
 </html>
+
