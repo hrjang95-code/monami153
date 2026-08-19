@@ -210,6 +210,28 @@ function showLoginToast(message) {
   }, 2500);
 }
 
+// Firebase Auth 동적 로드 및 초기화 함수 (한 곳에서 관리)
+let firebaseApp = null;
+async function getFirebaseAuth() {
+  const { initializeApp, getApps } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js");
+  const { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js");
+  
+  if (!firebaseApp) {
+    // 순수 정적 프로젝트이므로 Vercel 환경변수 자동 주입(import.meta.env)이 불가합니다.
+    // 실제 빌드 환경이 아니므로 아래에 실제 값을 문자열로 입력해야 정상 작동합니다.
+    const firebaseConfig = {
+      apiKey: "AIzaSyBAPG7eemlOfh_i6mEOJJPd-znbGlF7E8w",
+      authDomain: "monami153-2f1f7.firebaseapp.com",
+      projectId: "monami153-2f1f7",
+      storageBucket: "monami153-2f1f7.firebasestorage.app",
+      messagingSenderId: "145236413203",
+      appId: "1:145236413203:web:5d810f081904113a1728e6"
+    };
+    firebaseApp = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+  }
+  return { auth: getAuth(firebaseApp), GoogleAuthProvider, signInWithPopup, onAuthStateChanged };
+}
+
 function renderLoginState() {
   const loginUnauth = document.getElementById('login-unauth');
   const loginAuth = document.getElementById('login-auth');
@@ -271,6 +293,38 @@ function logoutUser() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // 1. Google 실제 로그인 버튼 연결
+  const googleBtn = document.getElementById('login-google');
+  if (googleBtn) {
+    googleBtn.addEventListener('click', async () => {
+      try {
+        const { auth, GoogleAuthProvider, signInWithPopup } = await getFirebaseAuth();
+        const provider = new GoogleAuthProvider();
+        
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        
+        currentUser = {
+          uid: user.uid,
+          provider: "google",
+          name: user.displayName || "MONAMI USER",
+          email: user.email || "",
+          photoURL: user.photoURL || "",
+          isLoggedIn: true
+        };
+        
+        saveCurrentUser();
+        renderLoginState();
+        renderMyPageState();
+        showLoginToast("Google 로그인 완료!\nMONAMI 153에 오신 것을 환영해요.");
+      } catch (error) {
+        console.error("Google 로그인 실패:", error);
+        showLoginToast("Google 로그인을 완료하지 못했습니다.");
+      }
+    });
+  }
+
+  // 2. 임시 로그인 버튼 연결 (기존 유지)
   const tempLoginBtn = document.getElementById('login-temporary');
   
   if (tempLoginBtn) {
@@ -313,10 +367,33 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 초기 로그인 상태 복원 및 렌더링
+  // 초기 로그인 상태 복원 및 렌더링 (기존 localStorage 기반)
   loadCurrentUser();
   renderLoginState();
   renderMyPageState();
+
+  // Firebase 로그인 상태 복원 (페이지 새로고침 시)
+  getFirebaseAuth().then(({ auth, onAuthStateChanged }) => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // Firebase 로그인 사용자가 있으면 currentUser 덮어쓰기
+        currentUser = {
+          uid: user.uid,
+          provider: "google",
+          name: user.displayName || "MONAMI USER",
+          email: user.email || "",
+          photoURL: user.photoURL || "",
+          isLoggedIn: true
+        };
+        saveCurrentUser();
+        renderLoginState();
+        renderMyPageState();
+      }
+      // Firebase 사용자가 없을 때는 기존 localStorage 로그인 상태 로직 유지
+    });
+  }).catch(error => {
+    console.error("Firebase 상태 복원 중 에러:", error);
+  });
 });
 
 // 장바구니 데이터 구조
