@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>결제 성공 - MONAMI 153</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="page">
+    <aside class="brand" aria-label="MONAMI 153 브랜드 쇼케이스">
+      <header class="brand__header">
+        <a href="index.html" class="brand__logo" aria-label="MONAMI 153 홈">
+          monami<span>153</span>
+        </a>
+      </header>
+      <section class="brand__copy">
+        <p class="brand__eyebrow">153, COLOR YOUR DAY</p>
+        <h1>MONAMI <em>153</em></h1>
+        <p class="brand__lead">
+          하나의 153,<br />
+          무한한 가능성
+        </p>
+        <label class="brand__search">
+          <input type="search" placeholder="어떤 153을 찾으시나요?" />
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="10.7" cy="10.7" r="6.4" />
+            <path d="m15.6 15.6 4.5 4.5" />
+          </svg>
+        </label>
+        <div class="brand__tags">
+          <button>#153오리지널</button>
+          <button>#토니펜</button>
+          <button>#153네이처</button>
+          <button>#한정판</button>
+          <button>#이벤트</button>
+          <button>#선물용</button>
+        </div>
+        <div class="brand__cards">
+          <article class="brand-card">
+            <h2 class="brand-card__title">153 STORY</h2>
+            <div class="brand-card__content">
+              <p class="brand-card__body">1963년부터<br />사랑받아온<br />모나미 153</p>
+            </div>
+            <div class="brand-card__illust" aria-hidden="true">
+              <img src="img/w_h2.png" alt="153 STORY" />
+            </div>
+            <div class="brand-card__footer">
+              <button class="brand-card__btn" aria-label="153 스토리 자세히 보기">
+                <svg viewBox="0 0 24 24">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </article>
+          <article class="brand-card">
+            <h2 class="brand-card__title">COLOR PICK</h2>
+            <div class="brand-card__content-row">
+              <p class="brand-card__body">당신의 하루를<br />물들일<br />컬러를 찾아</p>
+              <div class="brand-card__illust brand-card__illust--colorpick" aria-hidden="true">
+                <img src="img/w_h11.png" alt="COLOR PICK" />
+              </div>
+            </div>
+            <div class="brand-card__footer">
+              <button class="brand-card__btn" aria-label="컬러 찾기 서비스 바로가기">
+                <svg viewBox="0 0 24 24">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </article>
+          <article class="brand-card">
+            <h2 class="brand-card__title">GIFT SHOP</h2>
+            <div class="brand-card__content">
+              <p class="brand-card__body">153으로 전하는<br />마음, 선물하기</p>
+            </div>
+            <div class="brand-card__gift-icon" aria-hidden="true">
+              <img src="img/w_h3.png" alt="GIFT SHOP" />
+            </div>
+            <div class="brand-card__footer">
+              <button class="brand-card__btn" aria-label="선물샵 구경하기">
+                <svg viewBox="0 0 24 24">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </article>
+        </div>
+      </section>
+    </aside>
+
+    <main class="app-stage">
+      <section class="app">
+        <header class="chk-header">
+          <button class="chk-header__back" onclick="location.href='index.html'" aria-label="홈으로">
+            <svg viewBox="0 0 24 24">
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <h1 class="chk-header__title">ORDER COMPLETE</h1>
+        </header>
+        <div class="app__scroll chk-page" style="display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2rem;">
+          <div class="chk-popup__eyebrow" style="margin-bottom: 1rem; color: var(--red);">PAYMENT SUCCESS</div>
+          <div class="chk-popup__title" style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
+            <svg class="chk-popup__check" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width: 2rem; height: 2rem;">
+              <path d="M5 13l4 4L19 7" />
+            </svg>
+            <span style="font-size: 1.5rem; font-weight: 700;">결제 완료!</span>
+          </div>
+          <div class="chk-popup__desc" style="margin-bottom: 2rem; text-align: center; color: var(--text-muted);">
+            주문이 정상적으로 처리되었습니다.
+          </div>
+          <div style="background: var(--bg-card); padding: 1.5rem; border-radius: 12px; width: 100%; max-width: 300px; margin-bottom: 2rem;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+              <span style="color: var(--text-muted); font-size: 0.875rem;">주문번호</span>
+              <strong id="orderId" style="font-size: 0.875rem;">-</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+              <span style="color: var(--text-muted); font-size: 0.875rem;">결제금액</span>
+              <strong id="amount" style="font-size: 0.875rem;">-</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-muted); font-size: 0.875rem;">결제키</span>
+              <strong id="paymentKey" style="font-size: 0.75rem; word-break: break-all; max-width: 150px; text-align: right;">-</strong>
+            </div>
+          </div>
+          <div class="chk-popup__actions" style="display: flex; gap: 0.5rem; width: 100%; max-width: 300px;">
+            <button class="chk-popup__btn-primary" onclick="location.href='mypage.html'" style="flex: 1; padding: 1rem; border-radius: 8px; border: none; background: var(--red); color: white; font-weight: 700; cursor: pointer;">
+              주문내역 보기
+            </button>
+            <button class="chk-popup__btn-secondary" onclick="location.href='index.html'" style="flex: 1; padding: 1rem; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text); font-weight: 700; cursor: pointer;">
+              홈으로
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderId = urlParams.get('orderId');
+    const amount = urlParams.get('amount');
+    const paymentKey = urlParams.get('paymentKey');
+    
+    if(orderId) document.getElementById('orderId').innerText = orderId;
+    if(amount) document.getElementById('amount').innerText = Number(amount).toLocaleString() + '원';
+    if(paymentKey) document.getElementById('paymentKey').innerText = paymentKey;
+  </script>
+</body>
+</html>

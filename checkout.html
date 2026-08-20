@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 
 <head>
@@ -422,15 +422,59 @@
 
   </div>
 
+  <script src="https://js.tosspayments.com/v1"></script>
   <script>
     function openOrderPopup() {
-      document
-        .getElementById('orderPopupOverlay')
-        .classList.add('is-active');
+      // 토스페이먼츠 객체 초기화
+      const clientKey = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm';
+      const tossPayments = TossPayments(clientKey);
 
-      document
-        .getElementById('orderPopup')
-        .classList.add('is-active');
+      // 결제 금액 파싱
+      const totalText = document.querySelector('.chk-summary__total-val').innerText;
+      const amount = parseInt(totalText.replace(/[^0-9]/g, ''), 10);
+
+      // 상품명 파싱
+      const productNames = document.querySelectorAll('.chk-product__name');
+      let orderName = '';
+      if (productNames.length > 0) {
+        orderName = productNames[0].innerText.trim();
+        if (productNames.length > 1) {
+          orderName += ` 외 ${productNames.length - 1}건`;
+        }
+      } else {
+        orderName = 'MONAMI 153 상품';
+      }
+
+      // 고유 주문번호 생성 (결제할 때마다 중복되지 않는 값)
+      const orderId = 'ORDER_' + new Date().getTime() + '_' + Math.random().toString(36).substring(2, 9);
+
+      // 이름 추출
+      const customerNameInput = document.querySelector('input[placeholder="홍길동"]');
+      const customerName = customerNameInput ? customerNameInput.value || '고객' : '고객';
+
+      // 현재 URL 기준으로 success / fail URL 생성 (Vercel 등 확장자가 숨겨지는 환경 대응)
+      const successUrl = window.location.origin + '/success.html';
+      const failUrl = window.location.origin + '/fail.html';
+
+      // 결제 요청
+      tossPayments.requestPayment('카드', {
+        amount: amount,
+        orderId: orderId,
+        orderName: orderName,
+        customerName: customerName,
+        successUrl: successUrl,
+        failUrl: failUrl,
+      }).catch(function (error) {
+        if (error.code === 'USER_CANCEL') {
+          // 결제 고객이 결제창을 닫았을 때 예외 처리
+          console.log('사용자가 결제를 취소했습니다.');
+        } else if (error.code === 'INVALID_CARD_COMPANY') {
+          // 유효하지 않은 카드 코드에 대한 예외 처리
+          console.error('유효하지 않은 카드입니다.');
+        } else {
+          console.error(error);
+        }
+      });
     }
 
     // 주문 완료 팝업은 의도적으로 닫기 기능 없음
