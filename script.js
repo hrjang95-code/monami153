@@ -11,6 +11,34 @@ document.querySelectorAll(".product__heart").forEach((button) => {
   });
 });
 
+document.addEventListener('click', (e) => {
+  const checkbox = e.target.closest('.p-card__checkbox');
+  if (checkbox) {
+    e.preventDefault();
+    e.stopPropagation();
+    checkbox.classList.toggle('checked');
+    return;
+  }
+  
+  const heart = e.target.closest('.p-card__heart');
+  if (heart) {
+    e.preventDefault();
+    e.stopPropagation();
+    const svg = heart.querySelector('svg');
+    if (svg) {
+      if (svg.style.fill === 'var(--red)' || heart.classList.contains('active')) {
+        svg.style.fill = 'none';
+        svg.style.stroke = '#555';
+        heart.classList.remove('active');
+      } else {
+        svg.style.fill = 'var(--red)';
+        svg.style.stroke = 'var(--red)';
+        heart.classList.add('active');
+      }
+    }
+  }
+});
+
 function initDrawer() {
   const hamburgerBtn = document.querySelector('.app__header .app__icon[aria-label="메뉴"]');
   const appContainer = document.querySelector('.app');
@@ -24,7 +52,7 @@ function initDrawer() {
         <button class="drawer-panel__close" aria-label="닫기">
           <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </button>
-        <div class="drawer-panel__logo">monami<span>153</span></div>
+        <a href="login.html" class="drawer-panel__auth" id="drawer-auth-btn"><img src="img/login.png" alt="" class="drawer-auth-icon"><span>로그인</span></a>
       </div>
       
       <div class="drawer-panel__scroll">
@@ -93,7 +121,7 @@ function initDrawer() {
             </a>
           </li>
           <li>
-            <a href="javascript:void(0)">
+            <a href="story.html">
               <div class="drawer-menu__icon"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" fill="none" stroke="currentColor" stroke-width="2"/></svg></div>
               <div class="drawer-menu__text">
                 <strong>ABOUT 153</strong>
@@ -145,6 +173,8 @@ function initDrawer() {
   });
   closeBtn.addEventListener('click', closeDrawer);
   overlay.addEventListener('click', closeDrawer);
+
+  renderDrawerAuthState();
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && panel.classList.contains('is-active')) {
@@ -222,7 +252,7 @@ function showLoginToast(message) {
 let firebaseApp = null;
 async function getFirebaseAuth() {
   const { initializeApp, getApps } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js");
-  const { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js");
+  const { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js");
 
   if (!firebaseApp) {
     // 순수 정적 프로젝트이므로 Vercel 환경변수 자동 주입(import.meta.env)이 불가합니다.
@@ -237,7 +267,7 @@ async function getFirebaseAuth() {
     };
     firebaseApp = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
   }
-  return { auth: getAuth(firebaseApp), GoogleAuthProvider, signInWithPopup, onAuthStateChanged };
+  return { auth: getAuth(firebaseApp), GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut };
 }
 
 function renderLoginState() {
@@ -296,11 +326,52 @@ function renderMyPageState() {
   }
 }
 
-function logoutUser() {
+function renderDrawerAuthState() {
+  const drawerAuthBtn = document.getElementById('drawer-auth-btn');
+  if (!drawerAuthBtn) return;
+  
+  const iconHTML = `<img src="img/login.png" alt="" class="drawer-auth-icon">`;
+
+  if (currentUser && currentUser.isLoggedIn) {
+    let displayName = currentUser.nickname || currentUser.displayName || currentUser.name;
+    
+    if (!displayName && currentUser.email) {
+      displayName = currentUser.email.split('@')[0];
+    }
+    
+    let finalText = '고객님';
+    if (displayName) {
+      finalText = displayName.includes('님') ? displayName : displayName + '님';
+    }
+    drawerAuthBtn.innerHTML = `${iconHTML}<span>${finalText}</span>`;
+    drawerAuthBtn.href = 'mypage.html';
+  } else {
+    drawerAuthBtn.innerHTML = `${iconHTML}<span>로그인</span>`;
+    drawerAuthBtn.href = 'login.html';
+  }
+}
+
+async function logoutUser() {
+  if (currentUser) {
+    try {
+      if (currentUser.provider === 'google') {
+        const { auth, signOut } = await getFirebaseAuth();
+        await signOut(auth);
+      } else if (currentUser.provider === 'kakao') {
+        if (window.Kakao && Kakao.Auth && Kakao.Auth.getAccessToken()) {
+          await new Promise((resolve) => Kakao.Auth.logout(resolve));
+        }
+      }
+    } catch (error) {
+      console.error("로그아웃 처리 중 에러 발생:", error);
+    }
+  }
+
   currentUser = null;
   localStorage.removeItem('monami153_user');
   renderLoginState();
   renderMyPageState();
+  renderDrawerAuthState();
   showLoginToast("로그아웃되었습니다.");
 }
 
@@ -333,6 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
         saveCurrentUser();
         renderLoginState();
         renderMyPageState();
+        renderDrawerAuthState();
         showLoginToast("Google 로그인 완료!\nMONAMI 153에 오신 것을 환영해요.");
       } catch (error) {
         console.error("Google 로그인 실패:", error);
@@ -365,15 +437,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const logoutBtn = document.getElementById('logout-btn');
   if (logoutBtn) {
-    logoutBtn.addEventListener('click', () => {
-      logoutUser();
+    logoutBtn.addEventListener('click', async () => {
+      await logoutUser();
     });
   }
 
   const mypageLogoutBtn = document.getElementById('mypage-logout-btn');
   if (mypageLogoutBtn) {
-    mypageLogoutBtn.addEventListener('click', () => {
-      logoutUser();
+    mypageLogoutBtn.addEventListener('click', async () => {
+      await logoutUser();
       setTimeout(() => {
         location.href = 'login.html';
       }, 700);
@@ -384,6 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadCurrentUser();
   renderLoginState();
   renderMyPageState();
+  renderDrawerAuthState();
 
   // Firebase 로그인 상태 복원 (페이지 새로고침 시)
   getFirebaseAuth().then(({ auth, onAuthStateChanged }) => {
@@ -401,8 +474,18 @@ document.addEventListener('DOMContentLoaded', () => {
         saveCurrentUser();
         renderLoginState();
         renderMyPageState();
+        renderDrawerAuthState();
+      } else {
+        // Firebase 사용자가 없을 때는 기존 localStorage 로그인 상태 로직 유지
+        // 단, 로그아웃 완료 후 기존 정보(Google)가 잘못 복원되는 것 방지
+        if (currentUser && currentUser.provider === 'google') {
+          currentUser = null;
+          localStorage.removeItem('monami153_user');
+          renderLoginState();
+          renderMyPageState();
+          renderDrawerAuthState();
+        }
       }
-      // Firebase 사용자가 없을 때는 기존 localStorage 로그인 상태 로직 유지
     });
   }).catch(error => {
     console.error("Firebase 상태 복원 중 에러:", error);
@@ -410,41 +493,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // 장바구니 데이터 구조
-let cartItems = [
-  {
-    id: "product-001",
-    name: "MONAMI 153 VIVID",
-    price: 1500,
-    quantity: 3,
-    stock: 10,
-    image: "img/m_h2.png",
-    colorHex: "#cc0000",
-    colorName: "Signature Red",
-    filter: "hue-rotate(330deg) saturate(3)"
-  },
-  {
-    id: "product-002",
-    name: "PLUS PEN 3000",
-    price: 800,
-    quantity: 1,
-    stock: 10,
-    image: "img/w_h8.png",
-    colorHex: "#ffc107",
-    colorName: "Mustard Yellow",
-    filter: "hue-rotate(50deg) saturate(2)"
-  },
-  {
-    id: "product-003",
-    name: "FX ZETA 0.5",
-    price: 1200,
-    quantity: 2,
-    stock: 10,
-    image: "img/w_h9.png",
-    colorHex: "#1565c0",
-    colorName: "Deep Blue",
-    filter: "hue-rotate(210deg) saturate(2)"
-  }
-];
+let cartItems = [];
 
 try {
   const storedCart = localStorage.getItem('monami153_cart');
@@ -629,7 +678,7 @@ function removeCartItem(id) {
 }
 
 function initQuantitySelectors() {
-  const qtySelectors = document.querySelectorAll('.qty-selector, .col-mini-qty');
+  const qtySelectors = document.querySelectorAll('.qty-selector, .col-mini-qty, .dt-qty-control');
   
   qtySelectors.forEach(selector => {
     const buttons = selector.querySelectorAll('button');
@@ -649,7 +698,9 @@ function initQuantitySelectors() {
         let currentVal = Number(span.textContent);
         if (isNaN(currentVal)) currentVal = 0;
         
-        if (currentVal > 0) {
+        const minVal = selector.classList.contains('dt-qty-control') ? 1 : 0;
+        
+        if (currentVal > minVal) {
           span.textContent = currentVal - 1;
         }
       });
@@ -735,10 +786,354 @@ function initSortSelects() {
     });
   });
 }
+function initBrandCards() {
+  const cards = document.querySelectorAll('.brand-card');
+  cards.forEach(card => {
+    const titleEl = card.querySelector('.brand-card__title');
+    if (titleEl) {
+      const text = titleEl.textContent.trim().toUpperCase();
+      card.addEventListener('click', () => {
+        if (text === '153 STORY') {
+          location.href = 'story.html';
+        } else if (text === 'COLOR PICK') {
+          location.href = 'color.html';
+        } else if (text === 'GIFT SHOP') {
+          location.href = 'product.html';
+        }
+      });
+    }
+  });
+}
+
+function initCategoryFilter() {
+  const isHome = document.querySelector('.line-up__tabs') !== null;
+  const tabs = document.querySelectorAll(isHome ? '.line-up__tabs button' : '.prod-tabs button');
+  if (tabs.length === 0) return;
+
+  const cards = document.querySelectorAll(isHome ? '.product' : '.p-card, .col-mini-card');
+  
+  // Assign simple categories dynamically if missing
+  cards.forEach(card => {
+    const title = card.querySelector('h3');
+    if (title && !card.dataset.category) {
+      const t = title.textContent.toLowerCase();
+      let cats = ['all'];
+      if (t.includes('153 original') || t.includes('153 black') || t.includes('153 blue') || t.includes('153 red') || t.includes('153 green')) {
+        cats.push('original', 'pen');
+      }
+      if (t.includes('id') || t.includes('neo') || t.includes('pro')) {
+        cats.push('premium', 'pen');
+        if (t.includes('neo')) cats.push('gift');
+      }
+      if (t.includes('refill')) {
+        cats.push('refill');
+      }
+      card.dataset.category = cats.join(' ');
+    }
+  });
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const filterCat = urlParams.get('category') || 'all';
+
+  function applyFilter(cat) {
+    cards.forEach(card => {
+      const cats = card.dataset.category || '';
+      if (cat === 'all' || cats.includes(cat)) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  tabs.forEach(tab => {
+    let tabFilter = tab.dataset.filter;
+    if (!tabFilter) {
+      const text = tab.textContent.trim();
+      if (text === '전체') tabFilter = 'all';
+      else if (text === '153 ORIGINAL') tabFilter = 'original';
+      else if (text === '프리미엄') tabFilter = 'premium';
+      else if (text === '볼펜') tabFilter = 'pen';
+      else if (text === '리필심') tabFilter = 'refill';
+      else if (text === '기프트상품') tabFilter = 'gift';
+      tab.dataset.filter = tabFilter;
+    }
+
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove(isHome ? 'is-active' : 'active'));
+      tab.classList.add(isHome ? 'is-active' : 'active');
+      
+      const newCat = tab.dataset.filter;
+      applyFilter(newCat);
+      
+      if (!isHome) {
+        const newUrl = newCat === 'all' ? window.location.pathname : `?category=${newCat}`;
+        window.history.replaceState(null, '', newUrl);
+      }
+    });
+  });
+
+  if (!isHome) {
+    tabs.forEach(t => t.classList.remove('active'));
+    const activeTab = Array.from(tabs).find(t => t.dataset.filter === filterCat) || tabs[0];
+    if (activeTab) activeTab.classList.add('active');
+    applyFilter(filterCat);
+  } else {
+    tabs.forEach(t => t.classList.remove('is-active'));
+    if (tabs[0]) tabs[0].classList.add('is-active');
+    applyFilter('all');
+  }
+}
+
+function initColorMood() {
+  const isColorPage = document.querySelector('.col-mood-grid') !== null;
+  if (!isColorPage) return;
+
+  const moodCards = document.querySelectorAll('.col-mood-card');
+  const sectionHeader = document.querySelector('.col-blue-header h2');
+  const sectionDesc = document.querySelector('.col-blue-header p');
+  const sectionImgs = document.querySelectorAll('.col-blue-header img, .col-mini-card__img img');
+  const cardTitles = document.querySelectorAll('.col-mini-card h4');
+  const pickTitle = document.querySelector('.col-pick-card__title');
+  const btn = document.querySelector('.col-blue-btn button');
+
+  // 컬러 매핑 데이터
+  const colorData = {
+    black: { title: 'BLACK 153', text: '언제나 정답인 클래식.<br>오늘은 나의 컬러, BLACK.', filter: 'grayscale(1)' },
+    blue: { title: 'BLUE 153', text: '맑고 차분한 하루.<br>오늘은 나의 컬러, BLUE.', filter: 'hue-rotate(210deg) saturate(2)' },
+    red: { title: 'RED 153', text: '선명하고 대담하게.<br>오늘은 나의 컬러, RED.', filter: 'none' },
+    green: { title: 'GREEN 153', text: '산뜻하고 기분 좋은 하루.<br>오늘은 나의 컬러, GREEN.', filter: 'hue-rotate(90deg) saturate(2)' },
+    yellow: { title: 'YELLOW 153', text: '밝고 경쾌한 에너지.<br>오늘은 나의 컬러, YELLOW.', filter: 'hue-rotate(45deg) saturate(2)' }
+  };
+
+  moodCards.forEach(card => {
+    card.addEventListener('click', () => {
+      moodCards.forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+
+      const colorKey = Array.from(card.classList)
+        .find(c => c.startsWith('c-'))
+        ?.replace('c-', '');
+      
+      if (colorKey && colorData[colorKey]) {
+        const data = colorData[colorKey];
+        const colorName = colorKey.toUpperCase();
+
+        if (sectionHeader) sectionHeader.textContent = data.title;
+        if (sectionDesc) sectionDesc.innerHTML = data.text;
+        
+        sectionImgs.forEach(img => img.style.filter = data.filter);
+
+        cardTitles.forEach(title => {
+          title.textContent = title.textContent.replace(/Black|Blue|Red|Green|Yellow/i, colorName.charAt(0) + colorName.slice(1).toLowerCase());
+        });
+
+        if (pickTitle) pickTitle.textContent = colorName;
+
+        if (btn) {
+          btn.setAttribute('onclick', `location.href='product.html?color=${colorKey}'`);
+        }
+      }
+    });
+  });
+}
+
+function initProductColorFilter() {
+  const swatches = document.querySelectorAll('.prod-filter__swatches span');
+  if (swatches.length === 0) return;
+
+  const cards = document.querySelectorAll('.p-card');
+  const urlParams = new URLSearchParams(window.location.search);
+  const colorParam = urlParams.get('color');
+
+  // 컬러 데이터를 p-card에 부여
+  cards.forEach(card => {
+    const title = card.querySelector('h3');
+    if (title && !card.dataset.prodColor) {
+      const t = title.textContent.toLowerCase();
+      if (t.includes('black')) card.dataset.prodColor = 'black';
+      else if (t.includes('blue')) card.dataset.prodColor = 'blue';
+      else if (t.includes('red')) card.dataset.prodColor = 'red';
+      else if (t.includes('green')) card.dataset.prodColor = 'green';
+      else if (t.includes('yellow')) card.dataset.prodColor = 'yellow';
+      else card.dataset.prodColor = 'none';
+    }
+  });
+
+  function applyColorFilter(color) {
+    cards.forEach(card => {
+      if (!color || color === 'all') {
+        card.style.display = '';
+      } else {
+        if (card.dataset.prodColor === color) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      }
+    });
+
+    swatches.forEach(swatch => {
+      if (swatch.dataset.color === color) {
+        swatch.style.outline = '2px solid var(--red)';
+        swatch.style.outlineOffset = '2px';
+      } else {
+        swatch.style.outline = 'none';
+      }
+    });
+  }
+
+  // 스와치 클릭 이벤트
+  swatches.forEach(swatch => {
+    swatch.addEventListener('click', () => {
+      const col = swatch.dataset.color;
+      applyColorFilter(col);
+      
+      const newUrl = `?color=${col}`;
+      window.history.replaceState(null, '', newUrl);
+    });
+  });
+
+  if (colorParam) {
+    applyColorFilter(colorParam);
+  }
+}
+
+function initColorPageFilters() {
+  const topTabs = document.querySelectorAll('.col-tabs button');
+  const swatches = document.querySelectorAll('.col-filter__swatches span');
+  const innerTabs = document.querySelectorAll('.col-blue-inner-tabs button');
+  const grid = document.querySelector('.col-blue-grid');
+  const goBtn = document.querySelector('.col-blue-btn button');
+  if (!topTabs.length || !grid) return;
+
+  const seriesData = {
+    all: [
+      { name: '153 Original Blue', price: '₩300', img: 'img/w_h7.png', filter: 'hue-rotate(210deg) saturate(2)' },
+      { name: '153 ID Blue', price: '₩15,000', img: 'img/w_h9.png', filter: 'hue-rotate(210deg) saturate(2)' },
+      { name: '153 Neo Blue', price: '₩10,000', img: 'img/w_h8.png', filter: 'hue-rotate(210deg) saturate(2)' }
+    ],
+    original: [
+      { name: '153 Original Blue', price: '₩300', img: 'img/w_h7.png', filter: 'hue-rotate(210deg) saturate(2)' },
+      { name: '153 Black', price: '₩300', img: 'img/w_h7.png', filter: 'none' },
+      { name: '153 Red', price: '₩300', img: 'img/w_h7.png', filter: 'none' }
+    ],
+    id: [
+      { name: '153 ID Blue', price: '₩15,000', img: 'img/w_h9.png', filter: 'hue-rotate(210deg) saturate(2)' },
+      { name: '153 ID Black', price: '₩15,000', img: 'img/w_h9.png', filter: 'none' }
+    ],
+    neo: [
+      { name: '153 Neo Blue', price: '₩10,000', img: 'img/w_h8.png', filter: 'hue-rotate(210deg) saturate(2)' },
+      { name: '153 Neo', price: '₩10,000', img: 'img/w_h8.png', filter: 'none' }
+    ]
+  };
+
+  let currentSeries = 'all';
+  const cards = grid.querySelectorAll('.col-mini-card');
+
+  function renderGrid() {
+    const items = seriesData[currentSeries] || seriesData.all;
+
+    cards.forEach((card, i) => {
+      if (items[i]) {
+        card.style.display = 'flex';
+        const img = card.querySelector('.col-mini-card__img img');
+        const title = card.querySelector('h4');
+        const price = card.querySelector('.col-mini-card__price');
+
+        if (img) {
+          img.src = items[i].img;
+          img.alt = items[i].name;
+          img.style.filter = items[i].filter;
+        }
+        if (title) title.textContent = items[i].name;
+        if (price) price.textContent = items[i].price;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    const activeMood = document.querySelector('.col-mood-card.active');
+    if (activeMood) activeMood.click();
+  }
+
+  function updateGoBtn() {
+    if (!goBtn) return;
+    let categoryParam = 'original';
+    if (currentSeries === 'all') categoryParam = 'all';
+    else if (currentSeries === 'id' || currentSeries === 'neo') categoryParam = 'premium';
+    
+    let colorParam = 'blue';
+    const activeMood = document.querySelector('.col-mood-card.active');
+    if (activeMood) {
+      colorParam = Array.from(activeMood.classList).find(c => c.startsWith('c-'))?.replace('c-', '') || 'blue';
+    }
+    
+    goBtn.onclick = () => {
+      location.href = `product.html?color=${colorParam}&category=${categoryParam}`;
+    };
+  }
+
+  topTabs.forEach(tab => {
+    let text = tab.textContent.trim();
+    if (text === 'ALL') tab.dataset.series = 'all';
+    else if (text.includes('ORIGINAL')) tab.dataset.series = 'original';
+    else if (text.includes('ID')) tab.dataset.series = 'id';
+    else if (text.includes('NEO')) tab.dataset.series = 'neo';
+
+    tab.addEventListener('click', () => {
+      topTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      currentSeries = tab.dataset.series;
+
+      innerTabs.forEach(t => t.classList.remove('active'));
+      const activeInner = Array.from(innerTabs).find(t => t.dataset.series === currentSeries);
+      if (activeInner) activeInner.classList.add('active');
+
+      renderGrid();
+      updateGoBtn();
+    });
+  });
+
+  innerTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const series = tab.dataset.series || 'original';
+      const topTab = Array.from(topTabs).find(t => t.dataset.series === series);
+      if (topTab) topTab.click();
+    });
+  });
+
+  const colorOrder = ['black', 'blue', 'red', 'green', 'yellow'];
+  swatches.forEach((swatch, i) => {
+    swatch.dataset.color = colorOrder[i];
+    swatch.addEventListener('click', () => {
+      swatches.forEach(s => {
+        s.style.outline = 'none';
+        s.style.outlineOffset = '0';
+      });
+      swatch.style.outline = '2px solid var(--red)';
+      swatch.style.outlineOffset = '2px';
+
+      const col = swatch.dataset.color;
+      const moodCard = document.querySelector(`.col-mood-card.c-${col}`);
+      if (moodCard) moodCard.click();
+      
+      updateGoBtn();
+    });
+  });
+
+  const defaultTab = Array.from(topTabs).find(t => t.dataset.series === 'all');
+  if (defaultTab) defaultTab.click();
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   renderCart();
   updateCartBadge();
   initQuantitySelectors();
   initSortSelects();
+  initBrandCards();
+  initCategoryFilter();
+  initColorMood();
+  initProductColorFilter();
+  initColorPageFilters();
 });

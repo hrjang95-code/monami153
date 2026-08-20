@@ -236,9 +236,9 @@
               </div>
 
               <div class="col-blue-inner-tabs">
-                <button class="active">153 ORIGINAL</button>
-                <button>153 ID</button>
-                <button>153 NEO</button>
+                <button class="active" data-series="original">153 ORIGINAL</button>
+                <button data-series="id">153 ID</button>
+                <button data-series="neo">153 NEO</button>
               </div>
 
               <div class="col-blue-grid">
@@ -375,175 +375,140 @@
             <div class="col-mood-grid">
 
               <div class="col-mood-card c-black">
-                <h4>BLACK</h4>
-                <span class="mood-sub">CLASSIC</span>
-                <p class="mood-desc">
-                  언제나<br />
-                  정답인 컬러
-                </p>
+                <div class="mood-text-area">
+                  <h4>BLACK</h4>
+                  <span class="mood-sub">CLASSIC</span>
+                  <p class="mood-desc">언제나 정답인 컬러</p>
+                </div>
+                <div class="mood-img-area">
+                  <img src="img/mood_black.png" alt="Black Pen" />
+                </div>
               </div>
 
               <div class="col-mood-card c-blue">
-                <h4>BLUE</h4>
-                <span class="mood-sub">CLEAR</span>
-                <p class="mood-desc">
-                  맑고 차분한<br />
-                  나의 컬러
-                </p>
+                <div class="mood-text-area">
+                  <h4>BLUE</h4>
+                  <span class="mood-sub">CLEAR</span>
+                  <p class="mood-desc">맑고 차분한 나의 컬러</p>
+                </div>
+                <div class="mood-img-area">
+                  <img src="img/mood_blue.png" alt="Blue Pen" />
+                </div>
               </div>
 
               <div class="col-mood-card c-red">
-                <h4>RED</h4>
-                <span class="mood-sub">BOLD</span>
-                <p class="mood-desc">
-                  선명하고<br />
-                  대담한 컬러
-                </p>
+                <div class="mood-text-area">
+                  <h4>RED</h4>
+                  <span class="mood-sub">BOLD</span>
+                  <p class="mood-desc">선명하고 대담한 컬러</p>
+                </div>
+                <div class="mood-img-area">
+                  <img src="img/mood_red.png" alt="Red Pen" />
+                </div>
               </div>
 
               <div class="col-mood-card c-green">
-                <h4>GREEN</h4>
-                <span class="mood-sub">FRESH</span>
-                <p class="mood-desc">
-                  산뜻하고<br />
-                  기분 좋은 컬러
-                </p>
+                <div class="mood-text-area">
+                  <h4>GREEN</h4>
+                  <span class="mood-sub">FRESH</span>
+                  <p class="mood-desc">산뜻하고 기분 좋은 컬러</p>
+                </div>
+                <div class="mood-img-area">
+                  <img src="img/mood_green.png" alt="Green Pen" />
+                </div>
               </div>
 
               <div class="col-mood-card c-yellow">
-                <h4>YELLOW</h4>
-                <span class="mood-sub">BRIGHT</span>
-                <p class="mood-desc">
-                  밝고 경쾌한<br />
-                  에너지 컬러
-                </p>
+                <div class="mood-text-area">
+                  <h4>YELLOW</h4>
+                  <span class="mood-sub">BRIGHT</span>
+                  <p class="mood-desc">밝고 경쾌한 에너지 컬러</p>
+                </div>
+                <div class="mood-img-area">
+                  <img src="img/mood_yellow.png" alt="Yellow Pen" />
+                </div>
               </div>
 
             </div>
           </div>
 
-          <!-- TODAY COLOR PICK -->
-          <div class="col-pick">
-            <div class="col-pick-card">
-
-              <p class="col-pick-card__eyebrow">
-                오늘의 COLOR PICK
-              </p>
-
-              <h2 class="col-pick-card__title">
-                BLUE
-              </h2>
-
-              <div class="col-pick-card__click">
-                CLICK, CLICK.
-
-                <svg
-                  viewBox="0 0 24 24"
-                  width="16"
-                  height="16"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="3"
-                >
-                  <path d="m5 12h14m-7-7 7 7-7 7" />
-                </svg>
+          <!-- NOTEBOOK BANNER -->
+          <div class="note-banner" style="--pick-color: #1565c0; --pick-soft-color: #e8f0fe;">
+            <div class="note-holes">
+              <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+            
+            <div class="note-content">
+              <div class="note-left-flow">
+                <div class="note-eyebrow">
+                  TODAY'S COLOR PICK
+                  <div class="note-underline-scribble"></div>
+                </div>
+                
+                <p class="note-subtitle">오늘의 컬러,</p>
+                
+                <div class="note-title-wrap">
+                  <h2 class="note-title">BLUE</h2>
+                  <div class="note-title-scribble"></div>
+                  <div class="note-title-scribble2"></div>
+                </div>
+                
+                <div class="note-click">
+                  CLICK, CLICK. &rarr;
+                </div>
+                
+                <p class="note-desc">오늘은 <span>BLUE</span>를 꺼내 보세요.</p>
+                
+                <div class="note-tags">
+                  <span>#153오리지널</span>
+                  <span>#토니펜</span>
+                  <span>#153네이처</span>
+                  <span>#한정판</span>
+                  <span>#선물용</span>
+                </div>
               </div>
 
-              <p class="col-pick-card__desc">
-                오늘은 BLUE를 꺼내 보세요.
-              </p>
+              <div class="note-right-visual">
+                <span class="note-star-scribble">☆</span>
+                <div class="note-spec">
+                  MONAMI 153<br>0.7mm
+                  <div class="note-spec-underline"></div>
+                </div>
 
-              <img
-                src="img/image 4.png"
-                alt="Blue pens"
-                class="col-pick-card__bg"
-                onerror="this.style.display='none'"
-              />
+                <div class="note-memo">
+                  <div class="note-memo-tape"></div>
+                  <span>CLEAR</span>
+                  <span>CALM</span>
+                  <span>DAILY</span>
+                  <div class="note-memo-smile">:)</div>
+                </div>
+
+                <img src="img/pen_blue.png" alt="Blue Pen" class="note-pen-img" />
+                <img src="img/pen_blue2.png" alt="Blue Scribble" class="note-bottom-scribble" />
+              </div>
             </div>
           </div>
 
         </div>
 
         <!-- BOTTOM NAV -->
-        <nav
-          class="bottom-nav"
-          aria-label="하단 네비게이션"
-        >
-
+        <nav class="bottom-nav" aria-label="하단 네비게이션">
           <button onclick="location.href='index.html'">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path
-                d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
-              />
-              <polyline points="9 22 9 12 15 12 15 22" />
-            </svg>
-
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             <span>HOME</span>
           </button>
-
           <button onclick="location.href='product.html'">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.3-4.3" />
-            </svg>
-
+            <svg viewBox="0 0 24 24"><path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
             <span>PRODUCT</span>
           </button>
-
-          <button
-            class="is-active"
-            onclick="location.href='color.html'"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <circle cx="9" cy="21" r="1" />
-              <circle cx="20" cy="21" r="1" />
-              <path
-                d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
-              />
-            </svg>
-
+          <button class="is-active" onclick="location.href='color.html'">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
             <span>COLOR</span>
           </button>
-
           <button onclick="location.href='mypage.html'">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path
-                d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"
-              />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             <span>MY</span>
           </button>
-
         </nav>
 
       </section>

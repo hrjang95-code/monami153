@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 
 <head>
@@ -332,22 +332,25 @@
       .querySelector('.dt-btn-cart')
       .addEventListener('click', () => {
         if (typeof cartItems !== 'undefined') {
+          const qtySpan = document.querySelector('.dt-qty-control span');
+          const selectedQty = qtySpan ? (Number(qtySpan.textContent) || 1) : 1;
+
           const existingItem = cartItems.find(item => item.id === "product-004");
           if (existingItem) {
             const currentStock = existingItem.stock ?? 10;
-            if (existingItem.quantity >= currentStock) {
+            if (existingItem.quantity + selectedQty > currentStock) {
               if (typeof showStockFeedback === 'function') {
                 showStockFeedback();
               }
               return;
             }
-            existingItem.quantity += 1;
+            existingItem.quantity += selectedQty;
           } else {
             cartItems.push({
               id: "product-004",
               name: "MONAMI 153 ID",
               price: 15000,
-              quantity: 1,
+              quantity: selectedQty,
               stock: 10,
               image: "img/w_h9.png",
               colorHex: "var(--red)",
