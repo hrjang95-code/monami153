@@ -328,6 +328,38 @@
         .classList.remove('is-active');
     }
 
+    // Color Selection Logic
+    const colorBtns = document.querySelectorAll('.dt-color-btn');
+    let selectedColorName = 'Signature Black';
+    let selectedColorHex = '#111';
+    let selectedProductId = 'product-004-black';
+
+    colorBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        colorBtns.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        
+        const bg = btn.style.background || btn.style.backgroundColor;
+        if (bg.includes('cc0000') || bg.includes('204, 0, 0')) {
+          selectedColorName = 'Signature Red';
+          selectedColorHex = '#cc0000';
+          selectedProductId = 'product-004-red';
+        } else if (bg.includes('1d69b7') || bg.includes('29, 105, 183')) {
+          selectedColorName = 'Signature Blue';
+          selectedColorHex = '#1d69b7';
+          selectedProductId = 'product-004-blue';
+        } else if (bg.includes('07804f') || bg.includes('7, 128, 79')) {
+          selectedColorName = 'Signature Green';
+          selectedColorHex = '#07804f';
+          selectedProductId = 'product-004-green';
+        } else {
+          selectedColorName = 'Signature Black';
+          selectedColorHex = '#111';
+          selectedProductId = 'product-004-black';
+        }
+      });
+    });
+
     document
       .querySelector('.dt-btn-cart')
       .addEventListener('click', () => {
@@ -335,7 +367,7 @@
           const qtySpan = document.querySelector('.dt-qty-control span');
           const selectedQty = qtySpan ? (Number(qtySpan.textContent) || 1) : 1;
 
-          const existingItem = cartItems.find(item => item.id === "product-004");
+          const existingItem = cartItems.find(item => item.id === selectedProductId);
           if (existingItem) {
             const currentStock = existingItem.stock ?? 10;
             if (existingItem.quantity + selectedQty > currentStock) {
@@ -347,14 +379,14 @@
             existingItem.quantity += selectedQty;
           } else {
             cartItems.push({
-              id: "product-004",
+              id: selectedProductId,
               name: "MONAMI 153 ID",
               price: 15000,
               quantity: selectedQty,
               stock: 10,
               image: "img/w_h9.png",
-              colorHex: "var(--red)",
-              colorName: "Signature Red",
+              colorHex: selectedColorHex,
+              colorName: selectedColorName,
               filter: "none"
             });
           }
