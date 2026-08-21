@@ -4954,4 +4954,49 @@ body {
   0% { opacity: 0; }
   100% { opacity: 1; }
 }
+
+/* ==========================================================================
+   CUSTOM PEN CURSOR (Desktop Only)
+   ========================================================================== */
+@media (hover: hover) and (pointer: fine) {
+  body, 
+  body *:not(input):not(textarea) {
+    cursor: none !important;
+  }
+  
+  #custom-cursor-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    z-index: 999999;
+    will-change: transform;
+    /* Use translate3d in JS, no transition on wrapper for zero lag */
+  }
+
+  #custom-cursor-img {
+    position: absolute;
+    bottom: -2px; /* Align precisely to mouse coordinates (0,0) of wrapper */
+    left: -2px;
+    height: 165px; /* ~1.5x bigger than 110px */
+    width: auto;
+    transform: scale(1) rotate(0deg);
+    transform-origin: bottom left; /* Anchor the pen tip so it never shifts during scale/rotate */
+    transition: transform 0.15s ease-out; /* Only for hover/click */
+    filter: drop-shadow(4px 6px 8px rgba(0,0,0,0.2));
+  }
+
+  /* Hover state on interactable elements */
+  #custom-cursor-wrapper.hovering #custom-cursor-img {
+    transform: scale(1.04) rotate(-1deg);
+  }
+
+  /* Click state */
+  #custom-cursor-wrapper.clicking #custom-cursor-img {
+    transform: scale(0.95) rotate(0deg) translate(-1px, 2px);
+    transition: transform 0.1s ease-out; /* Snappy click response */
+  }
+}
 

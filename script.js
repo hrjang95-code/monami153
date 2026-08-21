@@ -1136,5 +1136,85 @@ document.addEventListener('DOMContentLoaded', () => {
   initColorMood();
   initProductColorFilter();
   initColorPageFilters();
+  initCustomCursor();
 });
+
+/* ==========================================================================
+   CUSTOM PEN CURSOR (Desktop Only)
+   ========================================================================== */
+function initCustomCursor() {
+  // Only apply for devices that support hover/fine pointer
+  if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
+  // Create wrapper and image dynamically
+  const wrapper = document.createElement('div');
+  wrapper.id = 'custom-cursor-wrapper';
+  wrapper.style.display = 'none'; // hidden until mouse moves
+  
+  const img = document.createElement('img');
+  img.src = 'img/monami153-writing.png';
+  img.id = 'custom-cursor-img';
+  img.alt = '';
+  
+  wrapper.appendChild(img);
+  document.body.appendChild(wrapper);
+
+  // Track mouse coordinates efficiently
+  let mouseX = 0;
+  let mouseY = 0;
+  let isMoving = false;
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    
+    // Initial sync
+    if (!isMoving) {
+      wrapper.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+      wrapper.style.display = 'block';
+      isMoving = true;
+    }
+  });
+
+  document.addEventListener('mouseenter', () => {
+    if (isMoving) wrapper.style.display = 'block';
+  });
+
+  document.addEventListener('mouseleave', () => {
+    wrapper.style.display = 'none';
+  });
+
+  // Use requestAnimationFrame for smooth zero-lag tracking
+  function renderCursor() {
+    if (isMoving) {
+      wrapper.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+    }
+    requestAnimationFrame(renderCursor);
+  }
+  requestAnimationFrame(renderCursor);
+
+  // Handle Hover states using event delegation
+  const interactableSelectors = 'a, button, input, label, select, .brand-card, .brand__tags button';
+  
+  document.body.addEventListener('mouseover', (e) => {
+    if (e.target.closest(interactableSelectors)) {
+      wrapper.classList.add('hovering');
+    }
+  });
+
+  document.body.addEventListener('mouseout', (e) => {
+    if (e.target.closest(interactableSelectors)) {
+      wrapper.classList.remove('hovering');
+    }
+  });
+
+  // Handle Click state
+  document.addEventListener('mousedown', () => {
+    wrapper.classList.add('clicking');
+  });
+
+  document.addEventListener('mouseup', () => {
+    wrapper.classList.remove('clicking');
+  });
+}
 
