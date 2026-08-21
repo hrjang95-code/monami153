@@ -703,7 +703,13 @@ body {
   font-size: 10px;
   color: #111;
   font-weight: 700;
-  white-space: nowrap
+  white-space: nowrap;
+  transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+}
+
+.brand__tags button:hover {
+  transform: scale(1.06) translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .brand__watermark {
@@ -4816,3 +4822,136 @@ body {
 .story-cta__btn:hover {
   background-color: #c0000a;
 }
+
+/* ==========================================================================
+   BRAND SHOWCASE ANIMATIONS
+   ========================================================================== */
+
+/* 153 STORY - 건물 일러스트 */
+.anim-building-wrapper {
+  transition: transform 0.35s ease-in-out;
+}
+.anim-building {
+  animation: floatBuilding 3s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+@keyframes floatBuilding {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+.brand-card:hover .anim-building-wrapper {
+  transform: translateY(-4px) scale(1.04);
+}
+.brand-card:hover .anim-building {
+  animation: none;
+}
+
+/* GIFT SHOP - 선물상자 */
+.anim-giftbox-wrapper {
+  transition: transform 0.35s ease-in-out;
+}
+.anim-giftbox {
+  animation: bounceGift 2.8s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+@keyframes bounceGift {
+  0%, 60%, 100% { transform: translateY(0) rotate(0); }
+  15% { transform: translateY(-5px) rotate(-1deg); }
+  30% { transform: translateY(0) rotate(0); }
+  45% { transform: translateY(-5px) rotate(1deg); }
+}
+.brand-card:hover .anim-giftbox-wrapper {
+  transform: translateY(-6px) scale(1.06) rotate(1.5deg);
+}
+.brand-card:hover .anim-giftbox {
+  animation: none;
+}
+
+/* COLOR PICK - 컬러칩 순차 애니메이션 */
+.anim-colorpick-wrapper {
+  /* No additional positioning needed if container handles it, 
+     but ensure it stays relative/absolute appropriately */
+}
+.anim-chip {
+  animation: chipFlow 3.5s ease-in-out infinite;
+  transform-origin: center;
+  transition: transform 0.3s ease-in-out;
+}
+/* Ensure the first chip dictates container size if container doesn't have fixed width/height */
+.anim-chip-1 {
+  position: relative !important;
+  clip-path: inset(0 0 80% 0);
+  animation-delay: 0s;
+}
+.anim-chip-2 {
+  position: absolute !important;
+  top: 0; left: 0; width: 100%; height: 100%;
+  clip-path: inset(20% 0 60% 0);
+  animation-delay: 0.15s;
+}
+.anim-chip-3 {
+  position: absolute !important;
+  top: 0; left: 0; width: 100%; height: 100%;
+  clip-path: inset(40% 0 40% 0);
+  animation-delay: 0.3s;
+}
+.anim-chip-4 {
+  position: absolute !important;
+  top: 0; left: 0; width: 100%; height: 100%;
+  clip-path: inset(60% 0 20% 0);
+  animation-delay: 0.45s;
+}
+.anim-chip-5 {
+  position: absolute !important;
+  top: 0; left: 0; width: 100%; height: 100%;
+  clip-path: inset(80% 0 0 0);
+  animation-delay: 0.6s;
+}
+
+@keyframes chipFlow {
+  0%, 70%, 100% { transform: translateX(0) scale(1); }
+  15% { transform: translateX(4px) scale(1.03); }
+}
+
+.brand-card:hover .anim-chip {
+  animation: chipHoverWave 0.6s ease-in-out forwards;
+}
+.brand-card:hover .anim-chip-1 { animation-delay: 0s; }
+.brand-card:hover .anim-chip-2 { animation-delay: 0.08s; }
+.brand-card:hover .anim-chip-3 { animation-delay: 0.16s; }
+.brand-card:hover .anim-chip-4 { animation-delay: 0.24s; }
+.brand-card:hover .anim-chip-5 { animation-delay: 0.32s; }
+
+@keyframes chipHoverWave {
+  0% { transform: translateX(0) scale(1); }
+  40% { transform: translateX(4px) scale(1.03); }
+  100% { transform: translateX(0) scale(1); }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .anim-building,
+  .anim-chip,
+  .anim-giftbox,
+  .brand-card:hover .anim-building-wrapper,
+  .brand-card:hover .anim-giftbox-wrapper,
+  .brand-card:hover .anim-chip {
+    animation: none !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ==========================================================================
+   TEXT REVEAL ANIMATION (index.html Desktop Only)
+   ========================================================================== */
+#brand-text-reveal .rev-char {
+  opacity: 0;
+  animation: charReveal 0.25s ease forwards;
+}
+
+@keyframes charReveal {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+

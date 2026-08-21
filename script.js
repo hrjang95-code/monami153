@@ -1137,3 +1137,4 @@ document.addEventListener('DOMContentLoaded', () => {
   initProductColorFilter();
   initColorPageFilters();
 });
+
